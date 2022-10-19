@@ -2,7 +2,9 @@ const express = require('express')
 const { router: adminRoutes } = require('./routes/admin')
 const shopRouter = require('./routes/shop')
 const errorController = require('./controllers/error')
+
 const { mongoConnect } = require('./utils/database')
+const User = require('./models/user')
 
 // Express and template setup
 const app = express()
@@ -14,13 +16,13 @@ app.use(express.static('public'))
 
 // Get user data
 app.use((req, res, next) => {
-    //     User.findByPk(1)
-    //         .then((user) => {
-    //             req.user = user
-    //             next()
-    //         })
-    //         .catch((err) => console.log(err))
-    next()
+    User.findById('63506d44f9123f11813b5fd9')
+        .then((user) => {
+            req.user = user
+            console.log(user)
+            next()
+        })
+        .catch((err) => console.log(err))
 })
 
 // ROUTES
