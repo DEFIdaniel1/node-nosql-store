@@ -21,13 +21,14 @@ exports.getAddProduct = (req, res, next) => {
     })
 }
 exports.postAddProduct = (req, res, next) => {
-    Product.create({
-        title: req.body.title,
-        price: req.body.price,
-        description: req.body.description,
-        imageUrl: req.body.imageUrl,
-        userId: req.user.id,
-    })
+    const product = new Product(
+        req.body.title,
+        req.body.price,
+        req.body.description,
+        req.body.imageUrl
+    )
+    product
+        .save()
         .then(() => {
             console.log('Created new product')
             res.redirect('/')

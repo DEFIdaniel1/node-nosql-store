@@ -11,7 +11,7 @@ const mongoConnect = (callback) => {
     )
         .then((client) => {
             console.log('Connected!')
-            _db = client.db()
+            db = client.db()
             callback()
         })
         .catch((err) => {
