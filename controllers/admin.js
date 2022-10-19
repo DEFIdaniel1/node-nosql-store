@@ -1,16 +1,16 @@
 const Product = require('../models/products')
 
-// exports.getProducts = (req, res, next) => {
-//     Product.findAll()
-//         .then((products) => {
-//             res.render('admin/products', {
-//                 pageTitle: 'Products',
-//                 prods: products,
-//                 path: '/admin/products',
-//             })
-//         })
-//         .catch((err) => console.log(err))
-// }
+exports.getProducts = (req, res, next) => {
+    Product.fetchAll()
+        .then((products) => {
+            res.render('admin/products', {
+                pageTitle: 'Products',
+                prods: products,
+                path: '/admin/products',
+            })
+        })
+        .catch((err) => console.log(err))
+}
 
 exports.getAddProduct = (req, res, next) => {
     // non-Express method: res.sendFile(path.join(rootDir, 'views', 'add-product.html'))
