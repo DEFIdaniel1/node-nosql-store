@@ -1,3 +1,4 @@
+const { deleteById } = require('../models/products')
 const Product = require('../models/products')
 
 // SHOP
@@ -54,7 +55,16 @@ exports.getCart = (req, res, next) => {
     //     .catch((err) => console.log(err))
 }
 exports.postCart = (req, res, next) => {
-    // const prodId = req.body.productId
+    const prodId = req.body.productId
+    Product.findById(prodId)
+        .then((product) => {
+            console.log('-----adding product: ' + product)
+            console.log(prodId)
+            return req.user.addToCart(product)
+        })
+        .then((result) => console.log(result))
+        .catch((err) => console.log(err))
+
     // let fetchedCart
     // let newQuantity = 1
     // req.user

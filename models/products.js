@@ -56,10 +56,9 @@ class Product {
             db
                 .collection('products')
                 // new item since it's a constructor?
-                .find({ _id: mongodb.ObjectId(prodId) })
-                .next()
+                .findOne({ _id: new mongodb.ObjectId(prodId) })
+                // .next()
                 .then((product) => {
-                    console.log(product)
                     return product
                 })
                 .catch((err) => console.log(err))
