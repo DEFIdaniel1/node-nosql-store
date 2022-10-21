@@ -14,7 +14,18 @@ class User {
         const db = getDb()
         return db.collection('users').insertOne(this)
     }
-
+    static findById(userId) {
+        const db = getDb()
+        return db
+            .collection('users')
+            .findOne({ _id: new ObjectId(userId) })
+            .then((user) => {
+                return user
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
     addToCart(product) {
         const cartProductIndex = this.cart.cartItems.findIndex((cp) => {
             return cp.productId.toString() === product._id.toString()
@@ -82,16 +93,21 @@ class User {
         )
     }
 
-    static findById(userId) {
+    addOrder() {
         const db = getDb()
-        return db
-            .collection('users')
-            .findOne({ _id: new ObjectId(userId) })
-            .then((user) => {
-                return user
-            })
-            .catch((err) => {
-                console.log(err)
+        //add cart items to an 'orders' collection
+        db.collection('orders')
+            .insertOne(this.cart)
+            .then((result) => {
+                //empty user cart
+                this.cart = { cartItems: [] }
+                //empty cart in database
+                return db
+                    .collection('users')
+                    .updateOne(
+                        { _id: new ObjectId(this._id) },
+                        { $set: { cart: { cartItems: [] } } }
+                    )
             })
     }
 }

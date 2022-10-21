@@ -87,39 +87,12 @@ exports.getOrders = (req, res, next) => {
     //     })
     // .catch((err) => console.log(err))
 }
-// exports.postOrder = (req, res, next) => {
-//     let orderProducts
-//     let fetchedCart
-//     req.user
-//         .getCart()
-//         //get products from cart
-//         .then((cart) => {
-//             fetchedCart = cart
-//             return cart.getProducts()
-//         })
-//         //create order
-//         .then((products) => {
-//             orderProducts = products
-//             return req.user.createOrder()
-//         })
-//         // add products to order
-//         .then((order) => {
-//             return order.addProducts(
-//                 // sequelize needs unique orderItem value (not quantity), which we added in the DB. replacing quantity w/ orderItem
-//                 orderProducts.map((product) => {
-//                     product.orderItem = {
-//                         quantity: product.cartItem.quantity,
-//                     }
-//                     return product
-//                 })
-//             )
-//         })
-//         .then(() => {
-//             return fetchedCart.setProducts(null)
-//         })
-//         .then(() => res.redirect('/orders'))
-//         .catch((err) => console.log(err))
-// }
+exports.postOrder = (req, res, next) => {
+    req.user
+        .addOrder()
+        .then((result) => res.redirect('/orders'))
+        .catch((err) => console.log(err))
+}
 
 // exports.getCheckout = (req, res, next) => {
 //     res.render('shop/checkout', { path: '/checkout', pageTitle: 'Checkout' })
