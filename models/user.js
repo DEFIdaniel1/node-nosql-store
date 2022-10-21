@@ -1,6 +1,5 @@
 const mongodb = require('mongodb')
 const getDb = require('../utils/database').getDb
-
 const ObjectId = mongodb.ObjectId
 
 class User {
@@ -33,7 +32,6 @@ class User {
             })
         }
         const updatedCart = { cartItems: updatedCartItems }
-
         const db = getDb()
         return db
             .collection('users')
@@ -42,10 +40,23 @@ class User {
                 { $set: { cart: updatedCart } }
             )
     }
+    deleteItemFromCart(productId) {
+        const updatedCartItems = this.cart.cartItems.filter((item) => {
+            console.log(item.productId.toString())
+            console.log(productId)
+            return item.productId.toString() !== productId.toString()
+        })
+        const db = getDb()
+        return db
+            .collection('users')
+            .updateOne(
+                { _id: new ObjectId(this._id) },
+                { $set: { cart: { cartItems: updatedCartItems } } }
+            )
+    }
 
     getCart() {
         const db = getDb()
-
         //fetch cart Ids and quantities
         const productIds = []
         const quantities = {}

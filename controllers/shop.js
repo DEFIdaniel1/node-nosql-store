@@ -55,7 +55,7 @@ exports.postCart = (req, res, next) => {
         .then((product) => {
             req.user.addToCart(product)
         })
-        .then(() => {
+        .then((result) => {
             res.redirect('/cart')
         })
         .catch((err) => console.log(err))
@@ -63,35 +63,29 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId
+    console.log('delete' + prodId)
     req.user
-        .getCart()
-        .then((cart) => {
-            return cart.getProducts({ where: { id: prodId } })
-        })
-        .then((products) => {
-            const product = products[0]
-            return product.cartItem.destroy()
-        })
-        .then(() => {
+        .deleteItemFromCart(prodId)
+        .then((result) => {
             res.redirect('/cart')
         })
         .catch((err) => console.log(err))
 }
 
 exports.getOrders = (req, res, next) => {
-    req.user
-        // need to add products list to order to pull product data.
-        // include, tells sequelize to also pull the products list with the order fetch
-        // sequelize pluralizes the one order to many product(s)
-        .getOrders({ include: ['products'] })
-        .then((orders) => {
-            res.render('shop/orders', {
-                path: '/orders',
-                pageTitle: 'Your Orders',
-                orders: orders,
-            })
-        })
-        .catch((err) => console.log(err))
+    // req.user
+    //     // need to add products list to order to pull product data.
+    //     // include, tells sequelize to also pull the products list with the order fetch
+    //     // sequelize pluralizes the one order to many product(s)
+    //     .getOrders({ include: ['products'] })
+    //     .then((orders) => {
+    //         res.render('shop/orders', {
+    //             path: '/orders',
+    //             pageTitle: 'Your Orders',
+    //             orders: orders,
+    //         })
+    //     })
+    // .catch((err) => console.log(err))
 }
 // exports.postOrder = (req, res, next) => {
 //     let orderProducts
@@ -127,6 +121,6 @@ exports.getOrders = (req, res, next) => {
 //         .catch((err) => console.log(err))
 // }
 
-exports.getCheckout = (req, res, next) => {
-    res.render('shop/checkout', { path: '/checkout', pageTitle: 'Checkout' })
-}
+// exports.getCheckout = (req, res, next) => {
+//     res.render('shop/checkout', { path: '/checkout', pageTitle: 'Checkout' })
+// }
