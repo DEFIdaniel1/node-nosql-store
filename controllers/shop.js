@@ -73,19 +73,16 @@ exports.postCartDeleteProduct = (req, res, next) => {
 }
 
 exports.getOrders = (req, res, next) => {
-    // req.user
-    //     // need to add products list to order to pull product data.
-    //     // include, tells sequelize to also pull the products list with the order fetch
-    //     // sequelize pluralizes the one order to many product(s)
-    //     .getOrders({ include: ['products'] })
-    //     .then((orders) => {
-    //         res.render('shop/orders', {
-    //             path: '/orders',
-    //             pageTitle: 'Your Orders',
-    //             orders: orders,
-    //         })
-    //     })
-    // .catch((err) => console.log(err))
+    req.user
+        .getOrders()
+        .then((orders) => {
+            res.render('shop/orders', {
+                path: '/orders',
+                pageTitle: 'Your Orders',
+                orders: orders,
+            })
+        })
+        .catch((err) => console.log(err))
 }
 exports.postOrder = (req, res, next) => {
     req.user
