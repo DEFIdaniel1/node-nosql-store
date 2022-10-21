@@ -45,23 +45,30 @@ class User {
 
     getCart() {
         const db = getDb()
-        const productIds = this.cart.items.map((i) => {
-            return i.productId
+
+        //fetch cart Ids and quantities
+        const productIds = []
+        const quantities = {}
+        this.cart.cartItems.map((item) => {
+            let prodId = item.productId
+            productIds.push(prodId)
+            quantities[prodId.toString()] = item.quantity
         })
-        return db
-            .collection('products')
-            .find({ _id: { $in: productIds } })
-            .toArray()
-            .then((products) => {
-                return products.map((p) => {
-                    return {
-                        ...p,
-                        quantity: this.cart.items.find((i) => {
-                            return i.productId.toString() === p._id.toString()
-                        }).quantity,
-                    }
+
+        return (
+            db
+                .collection('products')
+                // Output product data (title, etc) for cart/product matches
+                .find({ _id: { $in: productIds } })
+                .toArray()
+                .then((products) => {
+                    return products.map((p) => {
+                        // add cart quantity to product data
+                        return { ...p, quantity: quantities[p._id] }
+                    })
                 })
-            })
+                .catch((err) => console.log(err))
+        )
     }
 
     static findById(userId) {
@@ -70,7 +77,6 @@ class User {
             .collection('users')
             .findOne({ _id: new ObjectId(userId) })
             .then((user) => {
-                console.log(user)
                 return user
             })
             .catch((err) => {

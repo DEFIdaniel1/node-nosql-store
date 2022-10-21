@@ -41,7 +41,6 @@ class Product {
                 //only want to convert to array w/ less than 100 docs. else use pagination
                 .toArray()
                 .then((products) => {
-                    console.log(products)
                     return products
                 })
                 .catch((err) => {
@@ -70,9 +69,7 @@ class Product {
         return db
             .collection('products')
             .deleteOne({ _id: mongodb.ObjectId(prodId) })
-            .then(() => {
-                console.log('Deleted Product')
-            })
+            .then(() => {})
             .catch((err) => console.log(err))
     }
 }

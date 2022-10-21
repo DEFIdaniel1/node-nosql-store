@@ -16,7 +16,6 @@ const requestHandler = (req, res) => {
     if (url === '/page2' && method === 'POST') {
         const body = []
         req.on('data', (chunk) => {
-            console.log(chunk)
             body.push(chunk)
         })
         return req.on('end', () => {

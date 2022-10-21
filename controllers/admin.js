@@ -33,7 +33,6 @@ exports.postAddProduct = (req, res, next) => {
     product
         .save()
         .then(() => {
-            console.log('Created new product')
             res.redirect('/')
         })
         .catch((err) => {
